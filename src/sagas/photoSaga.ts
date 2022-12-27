@@ -11,5 +11,5 @@ function* fetchPhoto(action:any) {
  }
 
 export function* watchFetchPhoto() {
-    yield takeLatest(handleFetchPhoto.toString(), fetchPhoto);
-  }
+    yield takeLatest(handleFetchPhoto, fetchPhoto);
+  } 

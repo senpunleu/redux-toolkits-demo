@@ -15,7 +15,6 @@ const HomeScreen = () => {
   const dispatch = useAppDispatch();
   const photos = useAppSelector(state => state.photos);
   const albums = useAppSelector(state => state.albums);
-
   const [changeState, setChangeState] = useState('photo');
 
   const _renderItem = ({item, index}: any) => {
