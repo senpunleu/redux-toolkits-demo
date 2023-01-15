@@ -1,22 +1,15 @@
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../hooks/reduxHook';
-import {handleFetchPhoto} from '../redux/photoRedux/actions';
-import {handleFetchAlbum} from '../redux/albumRedux/albumSlice';
+import {handleFetchNews} from '../redux/newsRedux/actions';
 
 const HomeScreen = () => {
   const dispatch = useAppDispatch();
-  const photos = useAppSelector(state => state.photos);
-  const albums = useAppSelector(state => state.albums);
-  const [changeState, setChangeState] = useState('photo');
+  const news = useAppSelector(state => state.news);
 
+  useEffect(() => {
+    dispatch(handleFetchNews());
+  }, []);
   const _renderItem = ({item, index}: any) => {
     return (
       <View
@@ -25,17 +18,9 @@ const HomeScreen = () => {
           backgroundColor: '#fff',
           marginVertical: 10,
           borderRadius: 10,
-          marginBottom:
-            changeState == 'photo'
-              ? photos.data.length - 1 == index
-                ? 110
-                : 15
-              : albums.data.length - 1 == index
-              ? 110
-              : 15,
         }}>
         <Image
-          source={{uri: item.url}}
+          source={{uri: item.thumbnail}}
           style={{
             height: 200,
             width: '100%',
@@ -48,64 +33,34 @@ const HomeScreen = () => {
             margin: 15,
             marginBottom: 0,
           }}>
-          {item.url}
+          {item.title}
         </Text>
       </View>
     );
   };
 
   return (
-    <View>
-      <FlatList
-        style={{
-          padding: 15,
-          height: '100%',
-          backgroundColor: '#f6f6f6',
-        }}
-        data={changeState == 'photo' ? photos.data : albums.data}
-        renderItem={_renderItem}
-        ListEmptyComponent={() => {
-          return (
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text>No data found!</Text>
-            </View>
-          );
-        }}
-      />
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: '#fff',
-          padding: 15,
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            setChangeState('album');
-            dispatch(handleFetchAlbum());
-          }}
-          style={styles.button}>
-          <Text style={{color: '#fff'}}>Fetch Albums</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setChangeState('photo');
-            dispatch(handleFetchPhoto());
-          }}
-          style={[styles.button, {backgroundColor: '#5772c2'}]}>
-          <Text style={{color: '#fff'}}>Fetch Photos</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <FlatList
+      style={{
+        padding: 15,
+        height: '100%',
+        backgroundColor: '#f6f6f6',
+      }}
+      data={news.loading ? [] : news.data.data}
+      renderItem={_renderItem}
+      ListEmptyComponent={() => {
+        return (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text>No data found!</Text>
+          </View>
+        );
+      }}
+    />
   );
 };
 

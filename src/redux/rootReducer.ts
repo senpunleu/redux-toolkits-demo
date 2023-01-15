@@ -1,11 +1,8 @@
 import {combineReducers} from '@reduxjs/toolkit';
-import albumSlice from './albumRedux/albumSlice';
-import photoReducer from './photoRedux/reducers';
-
+import {newsReducer} from './newsRedux/reducer';
 
 const rootReducers = combineReducers({
-  photos: photoReducer,
-  albums:albumSlice
+  news: newsReducer,
 });
 
 export default rootReducers;

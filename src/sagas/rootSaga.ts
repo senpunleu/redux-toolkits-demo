@@ -1,9 +1,8 @@
-import { all } from 'redux-saga/effects'
-import { watchFetchAlbum } from './albumSaga';
-import { watchFetchPhoto } from './photoSaga';
+import {all} from 'redux-saga/effects';
+import {watchFetchNews} from './newsSaga';
 
 function* rootSaga() {
-    yield all([watchFetchPhoto(),watchFetchAlbum()]);
-  }
-  
+  yield all([watchFetchNews()]);
+}
+
 export default rootSaga;
